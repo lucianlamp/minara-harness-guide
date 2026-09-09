@@ -100,6 +100,40 @@
 
 <p>この VM のデスクトップは Grok Bot が使っているため、マウスで 1 画面ずつクリックして撮っていくわけにはいきません。そこで Electron の DevTools ポート（Chrome DevTools Protocol）に Python からつなぎ、画面遷移とスクリーンショットの取得をすべてスクリプトにまかせました。この記事はその過程で撮った 40 枚を、画面ごとに整理したものです。1 章から順に見ていきます。</p>
 
+<h3>0-1. 検証環境</h3>
+
+<p>この記事のスクリーンショットと動作確認は、次の環境で 2026 年 9 月 9 日に行いました。</p>
+
+<table>
+<tr><th>項目</th><th>内容</th></tr>
+<tr><td>ホスト</td><td>Grok Bot 用の Linux VM。Debian 13、Docker コンテナ内、X11 デスクトップ（VNC 経由）、<code>/dev/shm</code> は 64 MB</td></tr>
+<tr><td>アプリ</td><td>Minara Harness 1.0.1（Linux 用 .deb、711 MB、インストール先 <code>/opt/Minara</code>）。起動オプションは <code>--no-sandbox --disable-dev-shm-usage</code>（9 章）</td></tr>
+<tr><td>認証</td><td>Minara アカウント（OAuth）と ChatGPT アカウント（OpenAI OAuth）を連携。既定モデルの Minara auto から GPT 6 Astra に切り替えて使用</td></tr>
+<tr><td>撮影方法</td><td>Electron の DevTools ポート（Chrome DevTools Protocol）に Python から接続し、画面遷移・スクリーンショット取得・入力操作をスクリプトで実行。ウィンドウサイズは 1280×720 前後</td></tr>
+<tr><td>動作確認した範囲</td><td>
+<ul style="margin:0;padding-left:1.2em">
+<li>全画面の表示: Office / Chat / Coding / Strategies（Dashboard・Strategy Studio・Top Strategies・Marketplace）/ Automations / Portfolio / Markets / Data Studio / 設定 10 項目。いずれも表示は正常でした</li>
+<li>Chat の実行: GPT 6 Astra に日本語で質問し、49 秒で回答が返ってきました（出典 7 件つき）</li>
+<li>Strategy Studio の実行: 「SPY 日足の SMA クロス」を依頼したところ、「Strategy Studio は現物 ETF の $SPY に対応していない」と回答され、コード生成・バックテストには進みませんでした。perp（無期限先物）のシンボルなら進む可能性がありますが、未確認です</li>
+</ul>
+</td></tr>
+<tr><td>未検証</td><td>Institution セッション、Automations の作成、Data Studio での生成、Live Trading / Deploy、Personalization（Linux 版に項目なし）、Factor Research（Linux 版で無効）</td></tr>
+<tr><td>見つかった Linux 固有の問題</td><td>ログイン直後の白画面（<code>/dev/shm</code> 不足、9 章で詳述）。ログには D-Bus や通知デーモン不在の警告が出ますが、動作には影響しません。検証中にクラッシュや描画崩れは発生しませんでした</td></tr>
+</table>
+
+<h3>0-2. 免責事項</h3>
+
+<ul>
+<li>Linux 版が公式対応 OS ではない点は、冒頭の注記のとおりです。同じ手順で動く保証はなく、導入・運用は自己責任でお願いします</li>
+<li>この記事は個人の検証記録であり、公式の情報ではありません</li>
+<li>この記事は投資助言ではありません。画面に写る残高・戦略名・損益は筆者の環境での一例であり、特定の銘柄・戦略・サービスを推奨するものではありません</li>
+<li>Autopilot や Strategy Studio が示すバックテスト・成績は過去のデータに基づくもので、将来の成果を保証しません。実資金での運用には損失のリスクがあります</li>
+<li>画面のウォレットアドレスは加工して隠しています。残高や戦略名はそのまま掲載しています</li>
+<li>記載内容は 2026 年 9 月 9 日時点のバージョン 1.0.1 に基づきます。アップデートによって画面・機能・料金が変わる可能性があります</li>
+<li>8 章のベンチマークは Minara が自社で公表した数値であり、筆者が再現したものではありません</li>
+<li>各サービスの利用にあたっては、Minara や OpenAI などの利用規約に従ってください</li>
+</ul>
+
 <!-- ===================================================== -->
 <h2 id="ch1">1. Minara Harness とは？「ローカル金融エージェント」と npm CLI の違い</h2>
 
