@@ -40,6 +40,9 @@
   figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:6px; display:block; }
   figcaption { font-size:.9rem; color:var(--sub); margin-top:8px; }
   figcaption strong { color:var(--ink); }
+  .video-intro { margin:28px 0; }
+  .video-intro h2 { margin-top:0; }
+  .video-intro video { display:block; width:100%; height:auto; aspect-ratio:16 / 9; background:#1f2328; border-radius:6px; }
   ol.legend { font-size:.9rem; margin:8px 0 0; padding-left:0; list-style:none; columns:2; column-gap:24px; }
   ol.legend li { margin:2px 0; break-inside:avoid; }
   ol.legend li::before { content:attr(data-n); display:inline-block; width:22px; height:22px; line-height:22px; border-radius:50%; background:var(--accent); color:#fff; font-weight:bold; text-align:center; font-size:.8rem; margin-right:8px; }
@@ -70,6 +73,18 @@
 <p class="lead">しかも GPT 6 Astra や Claude Fable といった最高峰のモデルを、OAuth 連携で既存サブスクの範囲内で使えます（本記事で確認したのは OpenAI 側の連携です）。最高のモデルの知識を使いながら、エージェンティックなトレードに特化したハーネスをここまで作り込んできた、というのが一番の強みです。</p>
 
 <p class="lead">本記事では、それを Grok Bot が持つ Linux VM に同居させ、GPT 6 Astra への切り替え手順、Autopilot（自動売買）の実稼働画面、全 10 項目の設定まで、全画面を実機スクリーンショットで追っていきます。</p>
+
+<section class="video-intro" aria-labelledby="video-title">
+  <h2 id="video-title">動画で見る Minara Harness</h2>
+  <p>市場リサーチから戦略作成、自動運用、資産管理まで。主な機能と、それらがひとつにつながる特徴を紹介します。</p>
+  <figure>
+    <video controls playsinline preload="none" poster="media/minara-guide-poster.png" width="1920" height="1080" aria-label="Minara Harness 機能紹介動画">
+      <source src="media/minara-guide.mp4" type="video/mp4">
+      <track kind="captions" src="media/minara-guide-ja.vtt" srclang="ja" label="日本語">
+      <p><a href="media/minara-guide.mp4">機能紹介動画を再生する</a></p>
+    </video>
+  </figure>
+</section>
 
 <div class="meta">
   <ul style="margin:0;padding-left:1.2em">
