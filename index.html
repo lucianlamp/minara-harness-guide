@@ -94,6 +94,8 @@
 
 <p>手元には、Grok Bot という AI エージェントを動かすための Linux VM が 1 台あります。実体は Debian 13 の Docker コンテナで、X11 デスクトップを VNC 越しに使う構成です。もともと GUI アプリを動かす前提の箱ではありません。そこに「Claude Code の金融版ハーネス」と紹介されていた Minara Harness を同居させたらどうなるか気になり、試してみることにしました。macOS 版を紹介する記事は見かけましたが、Linux 版の画面をひととおり並べた記事は見当たりませんでした。</p>
 
+<div class="warn">公式ページで対応 OS として案内されているのは macOS だけです。Linux 用の .deb は配布されているものの公式サポートの対象ではないため、この記事の内容は非公式環境での動作報告として、自己責任で読んでください。1.0.1 では起動フラグを 2 つ足せば動きますが、Factor Research が無効、Personalization 設定がないなど、macOS 版と差があります（9 章）。</div>
+
 <p>Linux 用の .deb（1.0.1、711 MB）を入れて Minara を起動すると、ログイン直後に画面が真っ白になって落ちました。原因はコンテナの <code>/dev/shm</code> が 64 MB しかなく、レンダラーが <code>net::ERR_INSUFFICIENT_RESOURCES</code> を出して死んでいたことです。<code>--disable-gpu</code> では直らず、<code>--disable-dev-shm-usage</code>（サンドボックスがない環境なので <code>--no-sandbox</code> も併用）で直りました。詳しい手順は 9 章にまとめています。</p>
 
 <p>この VM のデスクトップは Grok Bot が使っているため、マウスで 1 画面ずつクリックして撮っていくわけにはいきません。そこで Electron の DevTools ポート（Chrome DevTools Protocol）に Python からつなぎ、画面遷移とスクリーンショットの取得をすべてスクリプトにまかせました。この記事はその過程で撮った 40 枚を、画面ごとに整理したものです。1 章から順に見ていきます。</p>
