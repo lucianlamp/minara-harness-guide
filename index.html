@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minara Harness 完全ガイド ― Linux 版 1.0.1 の全画面を実機スクショで徹底解説</title>
+<meta name="description" content="「Claude Code の金融版ハーネス」Minara Harness を Linux に入れて全画面を撮影。GPT 6 Astra への切り替え手順、Autopilot の実稼働画面、設定 10 項目を実機スクリーンショット 40 枚で解説します。">
+<link rel="canonical" href="https://lucianlamp.github.io/minara-harness-guide/">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="minara-harness-guide">
+<meta property="og:title" content="Minara Harness 完全ガイド ― Linux 版 1.0.1 の全画面を徹底解説">
+<meta property="og:description" content="GPT 6 Astra への切り替え、Autopilot の実稼働画面、設定 10 項目を実機スクリーンショット 40 枚で解説。">
+<meta property="og:url" content="https://lucianlamp.github.io/minara-harness-guide/">
+<meta property="og:image" content="https://lucianlamp.github.io/minara-harness-guide/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Minara Harness 完全ガイド ― Linux 版 1.0.1 の全画面を徹底解説">
+<meta name="twitter:description" content="GPT 6 Astra への切り替え、Autopilot の実稼働画面、設定 10 項目を実機スクリーンショット 40 枚で解説。">
+<meta name="twitter:image" content="https://lucianlamp.github.io/minara-harness-guide/og-image.png">
+<style>
+  :root { --ink:#1f2328; --sub:#57606a; --line:#d0d7de; --bg:#fff; --accent:#ff3b30; --note:#fff8e6; --code:#f6f8fa; }
+  * { box-sizing:border-box; }
+  body { margin:0; color:var(--ink); background:var(--bg); font-family:"Noto Sans CJK JP","Hiragino Sans","Yu Gothic",sans-serif; line-height:1.85; font-size:16px; }
+  main { max-width:900px; margin:0 auto; padding:32px 20px 80px; }
+  h1 { font-size:1.9rem; line-height:1.35; margin:0 0 8px; }
+  h2 { font-size:1.45rem; margin:56px 0 12px; padding-bottom:6px; border-bottom:2px solid var(--ink); }
+  h3 { font-size:1.15rem; margin:36px 0 8px; border-left:5px solid var(--accent); padding-left:10px; }
+  p { margin:0 0 1em; }
+  .lead { color:var(--sub); font-size:.95rem; margin-bottom:24px; }
+  .meta { font-size:.85rem; color:var(--sub); border:1px solid var(--line); border-radius:8px; padding:10px 14px; margin:16px 0 28px; }
+  .meta li { margin:2px 0; }
+  nav.toc { background:var(--code); border:1px solid var(--line); border-radius:8px; padding:14px 22px; margin:0 0 32px; }
+  nav.toc ol { margin:6px 0 0; padding-left:1.4em; }
+  nav.toc li { margin:3px 0; }
+  nav.toc a { color:var(--ink); text-decoration:none; }
+  nav.toc a:hover { text-decoration:underline; }
+  figure { margin:22px 0 30px; }
+  figure img { width:100%; height:auto; border:1px solid var(--line); border-radius:6px; display:block; }
+  figcaption { font-size:.9rem; color:var(--sub); margin-top:8px; }
+  figcaption strong { color:var(--ink); }
+  ol.legend { font-size:.9rem; margin:8px 0 0; padding-left:0; list-style:none; columns:2; column-gap:24px; }
+  ol.legend li { margin:2px 0; break-inside:avoid; }
+  ol.legend li::before { content:attr(data-n); display:inline-block; width:22px; height:22px; line-height:22px; border-radius:50%; background:var(--accent); color:#fff; font-weight:bold; text-align:center; font-size:.8rem; margin-right:8px; }
+  .note { background:var(--note); border-left:4px solid #e6a700; padding:10px 14px; margin:16px 0; font-size:.95rem; }
+  .warn { background:#fdecea; border-left:4px solid var(--accent); padding:10px 14px; margin:16px 0; font-size:.95rem; }
+  .steps { counter-reset:step; padding-left:0; list-style:none; }
+  .steps li { position:relative; padding-left:42px; margin:10px 0; }
+  .steps li::before { counter-increment:step; content:counter(step); position:absolute; left:0; top:2px; width:30px; height:30px; border-radius:50%; background:var(--ink); color:#fff; text-align:center; line-height:30px; font-weight:bold; }
+  table { border-collapse:collapse; width:100%; font-size:.92rem; margin:12px 0 24px; }
+  th, td { border:1px solid var(--line); padding:7px 10px; vertical-align:top; text-align:left; }
+  th { background:var(--code); }
+  code { background:var(--code); padding:1px 5px; border-radius:4px; font-size:.9em; }
+  pre { background:var(--code); border:1px solid var(--line); border-radius:6px; padding:12px 14px; overflow:auto; font-size:.88rem; }
+  .tag { display:inline-block; font-size:.75rem; padding:1px 8px; border-radius:10px; background:var(--code); border:1px solid var(--line); color:var(--sub); margin-left:6px; vertical-align:middle; }
+  footer { margin-top:64px; font-size:.85rem; color:var(--sub); border-top:1px solid var(--line); padding-top:14px; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Minara Harness 完全ガイド<br><span style="font-size:1.2rem;font-weight:normal">Linux 版 1.0.1 の全画面を実機スクリーンショットで徹底解説</span></h1>
+<p class="lead">「Claude Code の金融版ハーネス」と呼ばれる Minara Harness を、Linux に入れてログインし、全画面を撮ってきました。チャットのモデルを GPT 6 Astra に切り替える手順、Autopilot で実際に戦略を走らせている画面、設定 10 項目の中身まで、実機の画像で追います。</p>
+
+<div class="meta">
+  <ul style="margin:0;padding-left:1.2em">
+    <li>検証環境: Debian 13（Docker コンテナ内、X11 デスクトップ）、Minara Harness 1.0.1（.deb）、2026 年 9 月 9 日時点</li>
+    <li>ログイン状態: Minara アカウント＋ChatGPT アカウント（OpenAI OAuth）を接続済み</li>
+    <li>画像の赤い番号は、各図の下にある凡例に対応します。ウォレットアドレスは黒く塗りつぶしてありますが、残高や戦略名はそのままです</li>
+    <li>読み方: 1〜3 章は最初に通して読む部分、4 章以降は使う画面が決まってから引く部分です</li>
+  </ul>
+</div>
+
+<nav class="toc">
+<strong>目次</strong>
+<ol>
+  <li><a href="#ch1">Minara Harness は「ローカルで動く金融エージェント」で、npm の CLI とは別物</a></li>
+  <li><a href="#ch2">画面の地図: メインメニュー 6 つ、More の中に 4 つ、設定に 12 項目</a></li>
+  <li><a href="#ch3">最初に触る 3 画面: Office、Chat、そしてモデルを GPT 6 Astra に切り替える</a></li>
+  <li><a href="#ch4">Strategies: 戦略を作る・探す・走らせる（Autopilot）</a></li>
+  <li><a href="#ch5">Automations: 定時レビューや監視を文章で組む</a></li>
+  <li><a href="#ch6">More の中身: Portfolio、Markets、Data Studio、そして Coding</a></li>
+  <li><a href="#ch7">設定リファレンス: 困ったらここを引く</a></li>
+  <li><a href="#ch8">公式資料で見る Minara Harness（ベンチマーク・Institution・Trading Memory）</a></li>
+  <li><a href="#ch9">Linux（Docker）で動かすときの罠</a></li>
+  <li><a href="#ch10">用語集と参照先</a></li>
+</ol>
+</nav>
+
+<!-- ===================================================== -->
+<h2 id="ch1">1. Minara Harness は「ローカルで動く金融エージェント」で、npm の CLI とは別物</h2>
+
+<p>Minara Harness は、手元の PC で動くデスクトップアプリ（Electron 製）です。起動すると内部に AI エージェントとローカルのゲートウェイが立ち上がり、チャット、戦略のバックテストと自動売買（Autopilot）、定時実行の自動化、ダッシュボード生成、ポートフォリオ管理を 1 つの窓の中でこなします。Claude Code が「コードを書くためのエージェントの器（ハーネス）」だとすれば、Minara Harness は「市場を調べて売買するためのエージェントの器」です。</p>
+
+<p>混同しやすいのが、同じ Minara が出している npm パッケージの <code>minara</code> CLI です。こちらは Minara のサーバーに命令を投げる薄いクライアントで、現物スワップ（18 チェーン）や Hyperliquid の perps 注文を端末から打つためのものです。Harness とはログイン情報も別に保存されます。この記事で扱うのは Harness のほうだけです。</p>
+
+<p>Harness の頭脳は差し替えられます。標準は Minara 自身のモデル（<code>auto</code>）ですが、設定で ChatGPT アカウントを OAuth 接続すると、GPT 6 Astra を含む OpenAI 系のモデルがチャットの選択肢に並びます（3 章で手順を示します）。Anthropic や OpenRouter の API キーも受け付けます。</p>
+
+<!-- ===================================================== -->
+<h2 id="ch2">2. 画面の地図: メインメニュー 6 つ、More の中に 4 つ、設定に 12 項目</h2>
+
+<p>起動直後の画面が Office です。左ペインに Office / Chat / Coding / Strategies / Automations / More の 6 項目が並び、Portfolio と Markets は More の中に隠れています。macOS 版の紹介記事とはメニューの並びが違うので、先に全体の地図を押さえておきます。</p>
+
+<figure>
+  <img src="img/home.png" alt="Office 画面">
+  <figcaption><strong>図 2-1 Office（起動直後）。</strong>「Run Your Own Wall Street」の見出しの下に入力欄があり、ここに書いた指示がそのままエージェントに渡ります。</figcaption>
+  <ol class="legend">
+    <li data-n="1">メインメニュー（6 項目）</li>
+    <li data-n="2">指示の入力欄。日本語でよい</li>
+    <li data-n="3">「Ask each time」は実行前に確認を取るモード。「Connectors」は外部サービス連携</li>
+    <li data-n="4">使用中のモデルと推論強度。クリックで変更</li>
+    <li data-n="5">テンプレート（市場調査、戦略探し、家計ダッシュボード、Notion 分析）</li>
+    <li data-n="6">アカウントメニュー。設定はここからも開ける</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/more-menu.png" alt="More メニュー">
+  <figcaption><strong>図 2-2 More メニュー。</strong>Portfolio、Markets、Data Studio はここ。Factor Research は Linux 版 1.0.1 では灰色で、選んでも Office に戻されます。</figcaption>
+  <ol class="legend">
+    <li data-n="1">More をクリック</li>
+    <li data-n="2">Factor Research（Linux 版では無効）</li>
+    <li data-n="3">Portfolio / Markets / Data Studio</li>
+    <li data-n="4">Customize。メニューの並べ替え（設定の General に飛ぶ）</li>
+  </ol>
+</figure>
+
+<p>全体を一覧にすると次のとおりです。章番号は本記事の解説位置です。</p>
+
+<table>
+<tr><th>場所</th><th>画面</th><th>何をする画面か</th><th>章</th></tr>
+<tr><td rowspan="6">メインメニュー</td><td>Office</td><td>何でも頼める入口。テンプレートつき</td><td>3</td></tr>
+<tr><td>Chat</td><td>市場の質問に答える。カテゴリ別の質問プリセット、Institution セッション</td><td>3</td></tr>
+<tr><td>Coding</td><td>プロジェクトフォルダを指定してコードを書かせる</td><td>6</td></tr>
+<tr><td>Strategies</td><td>戦略の作成（Strategy Studio）、ランキング、購読、Autopilot 運用</td><td>4</td></tr>
+<tr><td>Automations</td><td>定時実行や監視を自然言語で作る</td><td>5</td></tr>
+<tr><td>More</td><td>下の 4 画面の入口</td><td>2</td></tr>
+<tr><td rowspan="4">More の中</td><td>Factor Research</td><td>Linux 版 1.0.1 では無効</td><td>—</td></tr>
+<tr><td>Portfolio</td><td>接続ウォレットの残高と稼働中の Autopilot</td><td>6</td></tr>
+<tr><td>Markets</td><td>指数、セクター、騰落ランキング、ウォッチリスト</td><td>6</td></tr>
+<tr><td>Data Studio</td><td>ダッシュボードを文章から生成</td><td>6</td></tr>
+<tr><td>設定</td><td>12 項目</td><td>General / Provider &amp; Model / Messaging / Features / Computer control / Sync / Security / Git access / Data / Updates など</td><td>7</td></tr>
+</table>
+
+<div class="note">Strategies、Strategy Studio、Automations、Data Studio は初回に「Quick tour」という 3 ページの案内が出ます。右上の「Skip intro」で飛ばせますが、機能の要点が 1 画面ずつまとまっているので、初回は Next で 3 ページ見ておくと後が楽です（4 章、5 章に画像を載せています）。</div>
+
+<!-- ===================================================== -->
+<h2 id="ch3">3. 最初に触る 3 画面: Office、Chat、そしてモデルを GPT 6 Astra に切り替える</h2>
+
+<h3>3-1. Chat は「質問カテゴリを選んでクリック」から始めるのが早い</h3>
+
+<p>Office とは別に Chat という画面があります。Office が作業の入口なのに対して、Chat は市場についての問答に特化していて、Trending / Stock / Pre-IPO / Crypto / Macro / Sentiment / Learn のカテゴリごとに質問のプリセットが用意されています。「$ETH を動かしている一番もっともらしいシナリオは？」といった質問が 8 ページ分あり、クリックするだけで投げられます。</p>
+
+<figure>
+  <img src="img/chat.png" alt="Chat 画面">
+  <figcaption><strong>図 3-1 Chat。</strong>左ペインの Sessions には通常の Chat と Institution の 2 種類があります。Institution は機関投資家向けの調査フローを模したモード、と説明されています（未検証: 今回はセッションを作っていません）。</figcaption>
+  <ol class="legend">
+    <li data-n="1">質問カテゴリ</li>
+    <li data-n="2">プリセット質問。1/8 ページ</li>
+    <li data-n="3">通常セッションと Institution セッション</li>
+    <li data-n="4">他の AI アプリから設定や会話を取り込む</li>
+    <li data-n="5">入力欄。「/」でコマンドも呼べる</li>
+  </ol>
+</figure>
+
+<h3>3-2. モデルの切り替えは入力欄の右下から。GPT 6 Astra は 3 クリック</h3>
+
+<p>ChatGPT アカウントを接続していれば（接続手順は 7 章の Provider &amp; Model）、チャットの入力欄右下に「GPT 5.6 Terra · Medium」のようにモデル名と推論強度が表示されます。ここが切り替えの入口です。</p>
+
+<ol class="steps">
+  <li>入力欄右下の「GPT 5.6 Terra · Medium」をクリックする。Output / Reasoning / Model の 3 行のメニューが開く</li>
+  <li>「Model」の行にカーソルを合わせる。左にモデル一覧が出る</li>
+  <li>一覧の先頭にある「GPT 6 Astra（gpt-6-astra）」をクリックする</li>
+</ol>
+
+<figure>
+  <img src="img/chat-model-picker.png" alt="モデル選択メニュー">
+  <figcaption><strong>図 3-2 手順 1。</strong>メニューは 3 行だけです。Output は回答の分量（Comprehensive / Concise）、Reasoning は推論の深さ（Medium など）、Model がモデル本体です。</figcaption>
+  <ol class="legend">
+    <li data-n="1">ここをクリック</li>
+    <li data-n="2">出力量 / 推論強度 / モデル</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/chat-model-list.png" alt="モデル一覧">
+  <figcaption><strong>図 3-3 手順 2〜3。</strong>OpenAI OAuth 接続時の一覧は上から GPT 6 Astra、GPT 5.6 Sol、GPT 5.6 Terra、GPT 5.6 Luna、GPT 5.5、GPT 5.3 Codex Spark。Minara 標準の「Minara Agent」も同じ一覧に入ります。</figcaption>
+  <ol class="legend">
+    <li data-n="1">Model にカーソル</li>
+    <li data-n="2">GPT 6 Astra を選ぶ</li>
+    <li data-n="3">モデル名で検索できる</li>
+    <li data-n="4">チェックが現在のモデル</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/chat-model-astra-selected.png" alt="Astra 選択後">
+  <figcaption><strong>図 3-4 切り替え後。</strong>右下が「GPT 6 Astra · Medium」に変わります。この選択は設定ファイル（<code>~/.minara/settings.json</code> の <code>defaultModel</code>）にも書き込まれ、次回起動でも保たれます。</figcaption>
+  <ol class="legend">
+    <li data-n="1">Astra に切り替わった</li>
+  </ol>
+</figure>
+
+<div class="note">一覧に並ぶモデルは、接続したプロバイダで決まります。ChatGPT を接続していない状態では「Minara Agent」だけになる見込みです（推定: 接続前の一覧は撮っていません）。Office、Strategy Studio、Automations、Data Studio の入力欄にも同じセレクタがあり、画面ごとに別のモデルを選べます。</div>
+
+<!-- ===================================================== -->
+<h2 id="ch4">4. Strategies: 戦略を作る・探す・走らせる（Autopilot）</h2>
+
+<p>Harness の中心機能です。上部に Dashboard / Strategy Studio / Top Strategies / Marketplace の 4 タブがあり、「作る（Studio）→ 探す（Top / Marketplace）→ 走らせる（Dashboard の Autopilot）」の順に読むと構造がつかめます。</p>
+
+<h3>4-1. Autopilot の考え方: 専用ウォレット 1 つに戦略 1 つ、投資上限とドローダウン停止を先に決める</h3>
+
+<figure>
+  <img src="img/autopilot-tour-1.png" alt="Autopilot のツアー">
+  <figcaption><strong>図 4-1 初回に出る Quick tour の 1 ページ目。</strong>Autopilot の単位は「専用ウォレット → 戦略 1 つ → 確認」で、投資上限（例では $1,000）とドローダウン停止（例では 20%）を設定してから起動します。</figcaption>
+  <ol class="legend">
+    <li data-n="1">専用ウォレット → 戦略 1 つ → 確認</li>
+    <li data-n="2">投資上限とドローダウン停止</li>
+    <li data-n="3">ツアーはスキップ可</li>
+  </ol>
+</figure>
+
+<h3>4-2. Dashboard は自分の作者ページ。稼働状況は内側の Autopilot タブ</h3>
+
+<p>Dashboard タブを開くと、まず自分の作者カード（アイコン、公開戦略数、Get Verified ボタン）が出ます。その下に Welcome / Autopilot / My Strategies / Starred の内側タブがあり、稼働中の戦略を見るのは Autopilot タブです。</p>
+
+<figure>
+  <img src="img/autopilot-dashboard.png" alt="Strategies の Dashboard">
+  <figcaption><strong>図 4-2 Dashboard（Welcome タブ）。</strong>「戦略を動かす人」と「戦略を作る人」で入口を分けています。</figcaption>
+  <ol class="legend">
+    <li data-n="1">4 つのサブ画面</li>
+    <li data-n="2">作者ページ。X / Discord / Telegram を紐づけて認証を取れる</li>
+    <li data-n="3">内側のタブ</li>
+    <li data-n="4">戦略を動かす人向け</li>
+    <li data-n="5">戦略を作る人向け</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/autopilot-tab-autopilot.png" alt="稼働中の Autopilot">
+  <figcaption><strong>図 4-3 Autopilot タブ（実際に稼働中）。</strong>総資産 $5,600.10、30 日損益 +$221.40（+4.12%）、稼働戦略 2 本。Wallet A（Hyperliquid）では「MU SKHYNIX SAMSUNG SNDK, long upward trend, daily」という半導体ロング戦略が 9 日間動いていて、累計 +$223.35（+8.23%）、直近 24 時間は −$112.31 です。</figcaption>
+  <ol class="legend">
+    <li data-n="1">稼働サマリー</li>
+    <li data-n="2">専用ウォレット一覧</li>
+    <li data-n="3">稼働中の戦略</li>
+    <li data-n="4">Stop で即停止</li>
+    <li data-n="5">入金と資金移動</li>
+  </ol>
+</figure>
+
+<p>My Strategies には自作の戦略が並びます。今回の環境では BTCUSDT の下書きが 2 本（Wider Stop Revert、RSI Stoch Snapback）で、どちらもまだバックテスト前の Draft 状態です。Starred は他人の戦略のブックマークで、購読前の比較に使います。</p>
+
+<figure>
+  <img src="img/autopilot-tab-my-strategies.png" alt="My Strategies">
+  <figcaption><strong>図 4-4 My Strategies。</strong>Category / Asset / Style / Risk / Availability / Direction で絞り込めます。</figcaption>
+  <ol class="legend">
+    <li data-n="1">フィルタ</li>
+    <li data-n="2">Draft は未公開の下書き</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/autopilot-tab-starred.png" alt="Starred">
+  <figcaption><strong>図 4-5 Starred。</strong>各カードに年率リターン、最大ドローダウン、シャープレシオ、計測期間（Window）、作者への収益シェア（Share）が出ます。左は年率 +3608.76%、最大 DD 27.02%、シャープ 4.23、シェア 5%。数字は 365 日窓のバックテスト値で、実運用の成績ではありません。</figcaption>
+  <ol class="legend">
+    <li data-n="1">成績指標</li>
+    <li data-n="2">作者への収益シェア</li>
+  </ol>
+</figure>
+
+<h3>4-3. Strategy Studio は「文章 → コード → バックテスト → 本番」を 1 画面で回す</h3>
+
+<p>戦略を作る画面です。ツアーの例文は「Buy BTC when hourly RSI falls below 30; sell above 70.」で、これを Describe 欄に書くとエージェントが売買ルールをコードにし、バックテストまで進めます。時系列（Time-series: 1 銘柄の売買タイミング）とクロスセクション（Cross-sectional: 複数銘柄の相対評価）の 2 種類があり、Factor library から既製のファクターも引けます。</p>
+
+<figure>
+  <img src="img/autopilot-strategy-studio.png" alt="Strategy Studio">
+  <figcaption><strong>図 4-6 Strategy Studio。</strong>文章のほかに、フォーム入力、戦略解説の動画、Pine Script などのコードからも生成できます。下段の「Start from a proven strategy」には GOOGL 1h Adaptive Earnings Regime 10x、RKLB 1h RSI Mean Reversion のような実績ある戦略が並び、複製して改造できます。</figcaption>
+  <ol class="legend">
+    <li data-n="1">4 ステップ</li>
+    <li data-n="2">文章で戦略を説明</li>
+    <li data-n="3">時系列 / クロスセクション</li>
+    <li data-n="4">ファクターライブラリ</li>
+    <li data-n="5">フォーム / 動画 / Pine Script から</li>
+    <li data-n="6">実績ある戦略から複製</li>
+  </ol>
+</figure>
+
+<h3>4-4. Top Strategies と Marketplace: 探すときは「購読可」と「認証作者」で絞る</h3>
+
+<p>Top Strategies は 90 日ローリングの累積リターンでランキングする画面で、Consistent（安定型）と Aggressive（攻撃型）に分かれます。右側の Popular Creators には Minara Labs（フォロワー 2.6K）、MrTokenAI（1.7K）などの作者が並びます。Marketplace は購読して自分のウォレットで走らせられる戦略の一覧で、カードの「Run」を押すと 4-1 の Autopilot 設定に進みます。</p>
+
+<figure>
+  <img src="img/autopilot-top-strategies.png" alt="Top Strategies">
+  <figcaption><strong>図 4-7 Top Strategies。</strong>チャートは毎時更新。「Publish my strategies」から自作戦略を公開すると、購読者の収益の一部（Share）が作者に入る仕組みです。</figcaption>
+  <ol class="legend">
+    <li data-n="1">安定型 / 攻撃型</li>
+    <li data-n="2">90 日ローリングの累積リターン</li>
+    <li data-n="3">人気の作者</li>
+    <li data-n="4">自分の戦略を公開</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/autopilot-marketplace.png" alt="Marketplace">
+  <figcaption><strong>図 4-8 Marketplace。</strong>先頭は Minara Labs の「CoinFull Prime (Neutral)」で、年率 +109.23%、最大 DD 28.71%、シャープ 1.99、運用 2,077 日、シェア 20%、購読者 99 人以上。運用日数（Window）が長いほど数字の信頼度は上がります。</figcaption>
+  <ol class="legend">
+    <li data-n="1">購読可・認証作者で絞る</li>
+    <li data-n="2">成績</li>
+    <li data-n="3">運用日数 / シェア / 購読者</li>
+    <li data-n="4">Run で Autopilot 起動</li>
+  </ol>
+</figure>
+
+<div class="warn">Marketplace の年率はバックテストと実運用が混ざった値で、画面上では区別がつきません。4-2 の実稼働では、Starred で年率 +3608% と表示されていた戦略が 9 日間で +8.23% でした。数字を鵜呑みにせず、投資上限とドローダウン停止を必ず設定してから Run してください。</div>
+
+<!-- ===================================================== -->
+<h2 id="ch5">5. Automations: 定時レビューや監視を文章で組む</h2>
+
+<p>「毎朝ポートフォリオを確認して要約を送って」のような依頼を、トリガー（時刻や条件）→ 処理 → 通知の自動化に変える画面です。ツアーの例は「Review my watchlist before the market opens and send me a summary.」で、これが「01 Start on time / 02 Review watchlist / 03 Send summary」の 3 段に分解されます。通知先は 7 章の Messaging で Telegram、Discord、Lark を接続しておきます。</p>
+
+<figure>
+  <img src="img/automations.png" alt="Automations">
+  <figcaption><strong>図 5-1 Automations。</strong>テンプレートは 6 種類。定期買付（Recurring buy plan）、決算・配当・経済指標のカレンダー（Catalyst calendar）、セクターローテーション監視、アイデアスクリーナー、投資テーゼの反証監視（Thesis tracker）、ウォレット送金監視（Wallet monitor）。</figcaption>
+  <ol class="legend">
+    <li data-n="1">文章で自動化を作る</li>
+    <li data-n="2">テンプレート</li>
+    <li data-n="3">作成（Chat）と管理（Manage）</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/automations-tour-1.png" alt="Automations のツアー">
+  <figcaption><strong>図 5-2 Quick tour の 1 ページ目。</strong>1 文の依頼が 3 段の手順に分解される様子です。</figcaption>
+  <ol class="legend">
+    <li data-n="1">トリガー → 処理 → 通知</li>
+  </ol>
+</figure>
+
+<p>今回の環境ではまだ自動化を作っていないため、実行結果の画面はありません。バックグラウンドで PC を操作させたい場合は、7 章の Computer control で「Allow background tasks to control this computer」を有効にする必要があります。</p>
+
+<!-- ===================================================== -->
+<h2 id="ch6">6. More の中身: Portfolio、Markets、Data Studio、そして Coding</h2>
+
+<h3>6-1. Portfolio は現物とパーペチュアルのウォレットを 1 画面に束ねる</h3>
+
+<p>接続した全ウォレットの合計額と内訳です。今回の環境は 4 ウォレットで合計 $6,118.22。現物（Spot）は EVM と Solana のアドレスを持つ 1 ウォレットに 3 資産で $522.88、パーペチュアル用は Hyperliquid が 2 つと Lighter が 1 つで合計 $5,595.34。稼働中の Autopilot はウォレットの行に「Autopilot · Running」として表示され、クリックで 4-2 の画面に飛びます。</p>
+
+<figure>
+  <img src="img/portfolio.png" alt="Portfolio">
+  <figcaption><strong>図 6-1 Portfolio。</strong>Wallet A（Hyperliquid、$2,932.98）で半導体ロング戦略、Default Lighter（$2,662.34）で「Drawdown-managed multi-factor long-short, Tradfi 30」が稼働中。アドレスは黒塗りしています。</figcaption>
+  <ol class="legend">
+    <li data-n="1">全ウォレット合計</li>
+    <li data-n="2">Overview / Spot / Perps / Strategies</li>
+    <li data-n="3">現物（EVM + Solana）</li>
+    <li data-n="4">パーペチュアル用（Hyperliquid × 2、Lighter × 1）</li>
+    <li data-n="5">稼働中の Autopilot</li>
+    <li data-n="6">送金 / 出金 / 入金</li>
+  </ol>
+</figure>
+
+<h3>6-2. Markets は指数とセクターの俯瞰。Crypto とウォッチリストはタブ切替</h3>
+
+<figure>
+  <img src="img/markets-stocks.png" alt="Markets">
+  <figcaption><strong>図 6-2 Markets（TradFi タブ）。</strong>撮影時は S&amp;P 500 が $7,673.52（−0.58%）、VIX が 15.72（+2.75%）。セクターのヒートマップは面積が時価総額、色が騰落です。下にスクロールすると Top Gainers / Top Losers / Most Active が続きます。</figcaption>
+  <ol class="legend">
+    <li data-n="1">株式 / 暗号資産 / ウォッチリスト</li>
+    <li data-n="2">主要指数</li>
+    <li data-n="3">セクター別</li>
+    <li data-n="4">ティッカー検索</li>
+  </ol>
+</figure>
+
+<h3>6-3. Data Studio は「見たいものを書く → 表示 → 会話で直す」でダッシュボードを作る</h3>
+
+<figure>
+  <img src="img/data-studio.png" alt="Data Studio">
+  <figcaption><strong>図 6-3 Data Studio。</strong>例文は「Show me live prices and 24h change for BTC, ETH and SOL」。テンプレートは暗号資産の価格ボード、BTC の資金調達率と建玉、Fear &amp; Greed、モメンタムランキングなど。Stocks &amp; macro タブに株式・マクロ向けが並びます。</figcaption>
+  <ol class="legend">
+    <li data-n="1">作って → 見て → 会話で修正</li>
+    <li data-n="2">見たいデータを文章で</li>
+    <li data-n="3">テンプレートの切替</li>
+    <li data-n="4">プロジェクト一覧（All / Published）</li>
+  </ol>
+</figure>
+
+<h3>6-4. Coding はフォルダを渡してコードを書かせる画面。Git の権限は設定で細かく絞れる</h3>
+
+<figure>
+  <img src="img/coding.png" alt="Coding">
+  <figcaption><strong>図 6-4 Coding。</strong>「Create new project」でホームディレクトリに新規フォルダを作るか、既存フォルダを追加して始めます。エージェントがローカルの SSH 鍵や Git アカウントで何をしてよいかは、7 章の Git access で操作ごとに許可します。</figcaption>
+  <ol class="legend">
+    <li data-n="1">新規プロジェクト</li>
+    <li data-n="2">既存フォルダを追加</li>
+  </ol>
+</figure>
+
+<!-- ===================================================== -->
+<h2 id="ch7">7. 設定リファレンス: 困ったらここを引く</h2>
+
+<p>設定は More → Customize、または左下のアカウントメニューから開きます。左に 10 項目のカテゴリが並び、上の検索欄で項目名を引けます。以下は「〜したい → どこを触るか」の逆引きです。</p>
+
+<table>
+<tr><th>やりたいこと</th><th>設定項目</th><th>要点</th></tr>
+<tr><td>ChatGPT や Claude をエンジンにしたい</td><td>Provider &amp; Model</td><td>OpenAI は OAuth（ChatGPT のデバイスコード認証）、Anthropic / OpenRouter は API キー</td></tr>
+<tr><td>Telegram で通知を受けたい</td><td>Messaging</td><td>Telegram / Discord / Lark(Feishu) を接続</td></tr>
+<tr><td>回答を短くしたい、並列を減らしたい</td><td>Features → Preferences</td><td>Output、Run tools in parallel、並列ツール上限（既定 16）、サブエージェント数（既定 8 / 8）</td></tr>
+<tr><td>バックテストの手数料を実態に合わせたい</td><td>Features → Backtest costs</td><td>Taker / Maker 手数料、スリッページ、レバレッジ、初期資金</td></tr>
+<tr><td>戦略生成を自己学習させたい</td><td>Features → Strategy Learning</td><td>Skill RL の 2 スイッチ。medium risk、再起動が必要</td></tr>
+<tr><td>画面を見せてアプリを操作させたい</td><td>Computer control</td><td>Control this computer、バックグラウンド許可、Session runtime（Auto / Cloud / Docker）</td></tr>
+<tr><td>別 PC と会話や設定を共有したい</td><td>Sync</td><td>自動同期のオン・オフと同期対象の選択</td></tr>
+<tr><td>出金に 2 段階認証をかけたい</td><td>Security</td><td>新デバイスのサインインと出金で 6 桁コードを要求</td></tr>
+<tr><td>Coding に push させたくない</td><td>Git access</td><td>読み取り / コミット / push / ブランチ操作 / 履歴書き換えを個別に許可</td></tr>
+<tr><td>エージェントの人格や記憶を編集したい</td><td>Data → Workspace</td><td>SOUL.md、AGENTS.md、IDENTITY.md、USER.md、MEMORY.md をアプリ内で編集</td></tr>
+<tr><td>メモリ使用量やトークン速度を見たい</td><td>Data → System resources</td><td>CPU / メモリ / ワークスペース容量 / ネットワーク / tok/s</td></tr>
+<tr><td>バージョンを確認・更新したい</td><td>Updates</td><td>Check for updates。1.0.1 が最新（2026-09-09）</td></tr>
+</table>
+
+<h3>7-1. Provider &amp; Model: ChatGPT を OAuth 接続すると「In use」がそちらに移る</h3>
+
+<figure>
+  <img src="img/settings-provider-openai-oauth.png" alt="Provider & Model">
+  <figcaption><strong>図 7-1 Provider &amp; Model。</strong>Minara OAuth と OpenAI OAuth が Connected、OpenRouter と Anthropic は未接続。OpenAI の接続は Codex と同じデバイスコード方式で、ChatGPT 側の Settings → Security で Device Code Authorization を有効にしておく必要があります。</figcaption>
+  <ol class="legend">
+    <li data-n="1">ChatGPT アカウントで接続済み</li>
+    <li data-n="2">Minara 標準（auto）</li>
+    <li data-n="3">API キーでも接続できる</li>
+    <li data-n="4">今使っているプロバイダ</li>
+  </ol>
+</figure>
+
+<h3>7-2. Features: 並列度とサブエージェント数は既定のままで十分。手数料だけは自分の取引所に合わせる</h3>
+
+<figure>
+  <img src="img/settings-features.png" alt="Features Preferences">
+  <figcaption><strong>図 7-2 Features → Preferences。</strong>並列ツール上限 16、フォアグラウンド / バックグラウンドのサブエージェント 8 ずつが既定。データ提供元への負荷が増えるので、上げる理由がなければそのままでよい値です。</figcaption>
+  <ol class="legend">
+    <li data-n="1">3 つのタブ</li>
+    <li data-n="2">回答の詳しさ</li>
+    <li data-n="3">並列ツール</li>
+    <li data-n="4">サブエージェント数</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/settings-features-backtest-costs.png" alt="Backtest costs">
+  <figcaption><strong>図 7-3 Features → Backtest costs。</strong>既定は手数料 0%、スリッページ 0%、レバレッジ 10 倍、初期資金 $10,000。画面の注記どおり Hyperliquid の目安は Taker 0.045%、Maker 0.015% なので、実運用前にここを埋めないとバックテストが甘くなります。</figcaption>
+  <ol class="legend">
+    <li data-n="1">手数料</li>
+    <li data-n="2">スリッページ / レバレッジ（最大 100 倍）</li>
+    <li data-n="3">初期資金</li>
+    <li data-n="4">保存</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/settings-features-strategy-learning.png" alt="Strategy Learning">
+  <figcaption><strong>図 7-4 Features → Strategy Learning。</strong>戦略生成のガイダンスをベンチマークとユーザー評価から学習させるスイッチ。2 つ目（外部情報の取捨選択）は 1 つ目を先に有効にしないと使えません。どちらも medium risk 表示で再起動が要ります。</figcaption>
+  <ol class="legend">
+    <li data-n="1">戦略生成の自己学習</li>
+    <li data-n="2">外部情報の取捨選択</li>
+    <li data-n="3">リスク表示</li>
+  </ol>
+</figure>
+
+<h3>7-3. Computer control: 画面操作の許可と、セッションを Cloud / Docker で動かす設定</h3>
+
+<figure>
+  <img src="img/settings-computer-control.png" alt="Computer control">
+  <figcaption><strong>図 7-5 Computer control。</strong>「Control this computer」を入れると次のターンから画面の閲覧とローカルアプリの操作が許可され、切ると即座に止まります。Session runtime は Auto / Cloud / Docker から選べ、Cloud はブラウザだけをクラウドに移し、Docker はターミナルをローカルで隔離します。</figcaption>
+  <ol class="legend">
+    <li data-n="1">PC 操作を許可</li>
+    <li data-n="2">バックグラウンドタスクにも許可</li>
+    <li data-n="3">Auto / Cloud / Docker</li>
+  </ol>
+</figure>
+
+<h3>7-4. Security と Git access: お金とコードの出口は個別に絞る</h3>
+
+<figure>
+  <img src="img/settings-security.png" alt="Security">
+  <figcaption><strong>図 7-6 Security。</strong>2 段階認証は「新デバイスのサインイン」と「出金」に個別にかかります。</figcaption>
+  <ol class="legend">
+    <li data-n="1">2 段階認証</li>
+    <li data-n="2">新デバイス / 出金で要求</li>
+    <li data-n="3">管理・無効化・デバイス削除</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/settings-git-identities.png" alt="Git access">
+  <figcaption><strong>図 7-7 Git access。</strong>既定では「Authorize all」はオフで、読み取り・コミット・push・ブランチ操作が個別にオン。force push や履歴の書き換えはさらに下の rewrite 権限が要ります。</figcaption>
+  <ol class="legend">
+    <li data-n="1">全許可（medium risk）</li>
+    <li data-n="2">操作ごとに許可</li>
+  </ol>
+</figure>
+
+<h3>7-5. Data: エージェントの「人格ファイル」はここで直接編集できる</h3>
+
+<figure>
+  <img src="img/settings-data.png" alt="Workspace & data">
+  <figcaption><strong>図 7-8 Data → Workspace。</strong>保存先は <code>~/.minara/workspace</code>。SOUL.md（視点と文体）、AGENTS.md、IDENTITY.md、USER.md、MEMORY.md、BOOTSTRAP.md が並び、Preview / Edit で中身を見て書き換えられます。Claude Code の CLAUDE.md にあたる層です。</figcaption>
+  <ol class="legend">
+    <li data-n="1">Workspace / Archive / System resources / Imports</li>
+    <li data-n="2">人格ファイル</li>
+    <li data-n="3">保存場所</li>
+    <li data-n="4">ここで編集できる</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/settings-data-system-resources.png" alt="System resources">
+  <figcaption><strong>図 7-9 Data → System resources。</strong>待機中のメモリは 369 MB。</figcaption>
+  <ol class="legend">
+    <li data-n="1">リソース</li>
+    <li data-n="2">トークン速度</li>
+  </ol>
+</figure>
+
+<h3>7-6. そのほかの項目</h3>
+
+<figure>
+  <img src="img/settings-general.png" alt="General">
+  <figcaption><strong>図 7-10 General。</strong>テーマ、壁紙、フォントサイズ、情報密度、言語（現状 English）。下の Navigation menu で 2 章のメインメニューと More の中身を入れ替えられます。</figcaption>
+  <ol class="legend">
+    <li data-n="1">設定カテゴリ</li>
+    <li data-n="2">外観と言語</li>
+    <li data-n="3">メインメニューの並べ替え</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/settings-sync.png" alt="Sync">
+  <figcaption><strong>図 7-11 Sync。</strong>会話、strategy-chat、パーソナライズ、投資プロファイル、ウォッチリストを項目ごとに同期対象にできます。既定は自動同期オフ。</figcaption>
+  <ol class="legend">
+    <li data-n="1">自動同期のオン・オフ</li>
+    <li data-n="2">同期する内容を選ぶ</li>
+    <li data-n="3">手動同期</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/settings-messaging.png" alt="Messaging">
+  <figcaption><strong>図 7-12 Messaging。</strong>Telegram、Discord、Lark(Feishu)。Automations の通知先になります。</figcaption>
+  <ol class="legend">
+    <li data-n="1">通知・操作の連携先</li>
+  </ol>
+</figure>
+
+<figure>
+  <img src="img/settings-updates.png" alt="Updates">
+  <figcaption><strong>図 7-13 Updates。</strong>1.0.1 が最新（2026 年 9 月 9 日確認）。</figcaption>
+  <ol class="legend">
+    <li data-n="1">バージョン</li>
+    <li data-n="2">手動更新</li>
+  </ol>
+</figure>
+
+<!-- ===================================================== -->
+<h2 id="ch8">8. 公式資料で見る Minara Harness（ベンチマーク・Institution・Trading Memory）</h2>
+
+<div class="warn">ここから 3 枚は、この記事の他の画像とは出どころが違います。Minara の公式ベンチマーク資料と、macOS 版の紹介画像です。手元の Linux 1.0.1 で撮った実機スクリーンショットではありません。Linux 版との違いや未検証の部分は、各項目で明記します。</div>
+
+<h3>8-1. ベンチマーク: 財務レポートは強いが、AgentDojo や SkillsBench は横並びに近い</h3>
+
+<p>Minara は自社のハーネスを OpenClaw、Hermes、Claude Code の 3 つと比較したベンチマーク結果を公開しています。GPT-5.6 Luna Pro、DeepSeek V4 Flash、Qwen 3.7 Flash という 3 つのベースモデルの上に各ハーネスを乗せ、6 種類のベンチマークで採点する形式です。</p>
+
+<figure>
+  <img src="img/official-benchmark.png" alt="Minara Harness Benchmark Performance の公式チャート">
+  <figcaption><strong>図 8-1 公式ベンチマークチャート。</strong>3 つのベースモデルすべてで、財務レポート作成（FinReportBench）は Minara が首位です（GPT-5.6 Luna Pro 51.3 対 OpenClaw 47.3 / Hermes 45.1 / Claude Code 50.3）。GPT-5.6 Luna Pro ではウェブリサーチ（BrowseComp 66.50）とスプレッドシート（SpreadsheetBench 2 22.90）でも他を離しています。一方でセキュアなツール使用（AgentDojo）、エージェントワークフロー（Harness-Bench）、スキルベースのタスク（SkillsBench v1.1）は僅差か、むしろ他フレームワークが上回る場面もあります。たとえば DeepSeek V4 Flash 上の SkillsBench では OpenClaw 54.55 に対して Minara は 36.36 です。チャート下部の注記どおり、これらは技術レポートからの集計値で、不確実性の幅（誤差範囲）は示されていません。出典: Minara 公式資料。</figcaption>
+</figure>
+
+<p>公式ベンチマークが強調しているのは「財務レポートに強い」という 1 点です。それ以外のベンチマークは他フレームワークと拮抗しているか、ベースモデルによって順位が入れ替わります。数字を見るときは、どのベンチマークの話かを確認したうえで受け取るのが安全です。</p>
+
+<h3>8-2. Institution モード: 13 エージェントの Roundtable（未検証・Mac 版）</h3>
+
+<p>3 章で触れた Chat の Institution セッションについて、今回の Linux 1.0.1 環境ではセッションを作らず未検証のままでした。macOS 版の公式画像には、Institution を開いたときの様子が写っています。</p>
+
+<figure>
+  <img src="img/official-institution.png" alt="Mac 版 Institution セッションの画面">
+  <figcaption><strong>図 8-2 Institution セッション（Mac 版、未検証）。</strong>中央のプロンプトは「Wizard Anon, Which core assumption should the team challenge?」。プリセットカードは「Should I buy, hold, or sell AAPL?」「What's the outlook for BTC this month?」「Build an earnings plan for AMZN」「Risk review on my NVDA position」の 4 枚です。入力欄には Hands-off mode、Connectors、使用モデル（GPT 5.5 · High）が並びます。左メニューは Office / Markets / Chat / Coding / Strategies / Portfolio / More の順で、Linux 1.0.1 のメインメニュー（2 章参照）とは並びが違います。出典: Minara 公式資料 / Mac 版。</figcaption>
+</figure>
+
+<p>右ペインには「Roundtable — Full-Spectrum Review（Built-in）」として、合計 13 エージェントが 7 段階に分かれて動く様子が表示されています。</p>
+
+<ol class="steps">
+  <li>Retrospective（Context setup、1 エージェント）</li>
+  <li>Parallel Research（Independent parallel、4 エージェント）</li>
+  <li>Thesis Debate（Cross-review、2 エージェント）</li>
+  <li>Research Synthesis（Managed synthesis、1 エージェント）</li>
+  <li>Execution Plan（Managed synthesis、1 エージェント）</li>
+  <li>Risk Review（Cross-review、3 エージェント）</li>
+  <li>Decision Committee（Final convergence、1 エージェント）</li>
+</ol>
+
+<p>公式の説明を訳すと、「あなたの研究に AI エージェントのチームを配置する。専門家が機会を調査し、想定を検証し、リスクをレビューする。情報源や意見の相違を追跡し、証拠が最終報告書をどう形作るかを確認できる」というものです。実際に Linux 1.0.1 で Institution セッションを作って Roundtable を最後まで走らせた記録はまだないため、この 7 段階が Linux 版でも同じ構成で出るかは今回は確認できていません。</p>
+
+<h3>8-3. Trading memory &amp; learning: Mac 版のパーソナライズ設定は Linux 1.0.1 にはまだない</h3>
+
+<p>7 章で見た Linux 1.0.1 の設定は General から Updates まで 10 項目で、パーソナライズ専用のカテゴリは含まれていません。macOS 版の公式画像には、Personalization の中に「Trading memory &amp; learning」という項目があり、Linux 版より一歩先に進んだ画面に見えます。</p>
+
+<figure>
+  <img src="img/official-trading-memory.png" alt="Mac 版 Trading memory & learning 設定画面">
+  <figcaption><strong>図 8-3 Trading memory &amp; learning（Mac 版）。</strong>左メニューは About you（My Profile / Learned Preferences / Custom）、Safety and guidance（Financial safety）、Memory content（Long-term memory / Trading Memory / Behavior Memory）、Learning and status（Learning Health / Preference Learning / Decision Capture / Self-learning）の 4 グループ。タブは Activity / What it learned / Your notes で、Your notes タブには「Trading notes you saved」（未保存）、「Your market views」（Nothing here yet）、「How you like to analyze」（例: "User prefers Institution Mode summaries capped near 800 words with direct quotes where possible."、6 日前）が並びます。注記は「過去の成績は将来の成果を予測しない。ここに書かれている内容はアドバイスではない。Minara の認識を修正したいときはチャットで直接伝えること。このページは読み取り専用」という趣旨です。出典: Minara 公式資料 / Mac 版。</figcaption>
+</figure>
+
+<p>Linux 1.0.1 側で近い役割を持つのは、7-5 で紹介した Data → Workspace の SOUL.md、AGENTS.md、USER.md、MEMORY.md です。こちらはエージェントの視点や行動指針をテキストファイルとして直接編集する仕組みで、Mac 版の Trading memory のように「学習した内容を項目ごとに一覧で見る」画面ではありません。同じ「記憶と学習」という役割を、Linux 版はファイル編集で、Mac 版は専用の設定画面で扱っている、という違いです。</p>
+
+<!-- ===================================================== -->
+<h2 id="ch9">9. Linux（Docker）で動かすときの罠</h2>
+
+<p>.deb をインストールすると <code>/opt/Minara/Minara</code> が本体で、<code>/usr/bin/Minara</code> にリンクが張られます（npm の <code>minara</code> とは大文字小文字で区別されるので衝突しません）。普通の Linux デスクトップならメニューから起動して終わりですが、Docker コンテナの中で動かした今回は 2 つの罠を踏みました。</p>
+
+<p>1 つ目は <strong>ログイン直後に画面が真っ白になる</strong>症状です。コンテナの <code>/dev/shm</code> が 64 MB しかなく、レンダラーが JS のチャンクを読み込む途中で <code>net::ERR_INSUFFICIENT_RESOURCES</code> を出して落ちていました。<code>--disable-gpu</code> では直らず、<code>--disable-dev-shm-usage</code> で解決します。2 つ目はサンドボックス用のユーザー名前空間がない環境で、<code>--no-sandbox</code> が要ります。この 2 つを入れた起動スクリプトはこうなります。</p>
+
+<pre>#!/usr/bin/env bash
+export DISPLAY="${DISPLAY:-:0}"
+exec /opt/Minara/Minara --no-sandbox --disable-dev-shm-usage "$@"</pre>
+
+<p>ホスト上の通常のデスクトップ Linux でこの 2 つが必要かは試していません（推定: <code>/dev/shm</code> が数 GB ある通常環境では不要）。もう 1 つ、Linux 版 1.0.1 では More メニューの Factor Research が灰色で開けません。macOS 版の紹介記事にある機能が見当たらないときは、まずここを疑ってください。</p>
+
+<!-- ===================================================== -->
+<h2 id="ch10">10. 用語集と参照先</h2>
+
+<table>
+<tr><th>用語</th><th>意味</th></tr>
+<tr><td>Harness（ハーネス）</td><td>AI モデルを実作業に使うための器。ツール、権限、記憶、UI をまとめたもの。Minara Harness は金融向け</td></tr>
+<tr><td>Autopilot</td><td>専用ウォレットに戦略を 1 つ割り当て、投資上限とドローダウン停止のルール内で自動売買させる機能</td></tr>
+<tr><td>Strategy Studio</td><td>文章、フォーム、動画、コードから売買戦略を生成し、バックテストする画面</td></tr>
+<tr><td>Marketplace / Top Strategies</td><td>他の作者の戦略を購読する場所と、そのランキング。購読者の収益の一部（Share）が作者に入る</td></tr>
+<tr><td>Time-series / Cross-sectional</td><td>時系列戦略は 1 銘柄の売買タイミングを、クロスセクション戦略は複数銘柄の相対評価（ロング・ショート）を扱う</td></tr>
+<tr><td>Perps（パーペチュアル）</td><td>期限のない先物。Harness では Hyperliquid と Lighter に対応</td></tr>
+<tr><td>Drawdown stop</td><td>資産が高値から一定率下がったら戦略を止めるルール</td></tr>
+<tr><td>OAuth 接続</td><td>API キーを貼らずに、ChatGPT や Minara のアカウントでログインしてモデルを使う方式</td></tr>
+<tr><td>SOUL.md / AGENTS.md</td><td>エージェントの視点や行動指針を書いたファイル。Claude Code の CLAUDE.md にあたる</td></tr>
+</table>
+
+<p>公式の情報源は Minara の X アカウント（<a href="https://x.com/minara/status/2097413018510618899">Harness の発表ポスト</a>）と、Claude Code 向けスキルを配布している GitHub リポジトリ <a href="https://github.com/Minara-AI/minara-skills">Minara-AI/minara-skills</a> です。この記事でまだ実機検証していない画面（Institution セッションの実行、Automations の実行結果、Cloud ランタイム）は、次回以降に Linux で触ってから追記します。</p>
+
+<footer>
+  最終更新: 2026 年 9 月 9 日（Minara Harness 1.0.1、Linux）。画面の数値は撮影時点のもので、残高や成績は変動します。ウォレットアドレスはすべて塗りつぶしています。
+</footer>
+
+</main>
+</body>
+</html>
