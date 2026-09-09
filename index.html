@@ -4,20 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Minara Harness 完全ガイド ― Linux 版 1.0.1 の全画面を実機スクショで徹底解説</title>
-<meta name="description" content="Grok Bot 用の Linux VM に Minara Harness を入れて全画面を撮影。GPT 6 Astra への切り替え手順、Autopilot の実稼働画面、設定 10 項目を実機スクリーンショット 40 枚で解説します。">
+<meta name="description" content="Grok Bot が動いている Linux VM に Minara Harness を入れて全画面を撮影。GPT 6 Astra への切り替え手順、Autopilot の実稼働画面、設定 10 項目を実機スクリーンショット 40 枚で解説します。">
 <link rel="canonical" href="https://lucianlamp.github.io/minara-harness-guide/">
 <meta property="og:type" content="article">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:site_name" content="minara-harness-guide">
 <meta property="og:title" content="Minara Harness 完全ガイド ― Linux 版 1.0.1 の全画面を徹底解説">
-<meta property="og:description" content="Grok Bot 用の Linux VM に Minara Harness を入れて全画面を撮影。GPT 6 Astra への切り替え、Autopilot の実稼働画面、設定 10 項目を実機スクリーンショット 40 枚で解説。">
+<meta property="og:description" content="Grok Bot が動いている Linux VM に Minara Harness を入れて全画面を撮影。GPT 6 Astra への切り替え、Autopilot の実稼働画面、設定 10 項目を実機スクリーンショット 40 枚で解説。">
 <meta property="og:url" content="https://lucianlamp.github.io/minara-harness-guide/">
 <meta property="og:image" content="https://lucianlamp.github.io/minara-harness-guide/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Minara Harness 完全ガイド ― Linux 版 1.0.1 の全画面を徹底解説">
-<meta name="twitter:description" content="Grok Bot 用の Linux VM に Minara Harness を入れて全画面を撮影。GPT 6 Astra への切り替え、Autopilot の実稼働画面、設定 10 項目を実機スクリーンショット 40 枚で解説。">
+<meta name="twitter:description" content="Grok Bot が動いている Linux VM に Minara Harness を入れて全画面を撮影。GPT 6 Astra への切り替え、Autopilot の実稼働画面、設定 10 項目を実機スクリーンショット 40 枚で解説。">
 <meta name="twitter:image" content="https://lucianlamp.github.io/minara-harness-guide/og-image.png">
 <style>
   :root { --ink:#1f2328; --sub:#57606a; --line:#d0d7de; --bg:#fff; --accent:#ff3b30; --note:#fff8e6; --code:#f6f8fa; }
@@ -61,11 +61,11 @@
 <main>
 
 <h1>Minara Harness 完全ガイド<br><span style="font-size:1.2rem;font-weight:normal">Linux 版 1.0.1 の全画面を実機スクリーンショットで徹底解説</span></h1>
-<p class="lead">「Claude Code の金融版ハーネス」と紹介されていた Minara Harness を、Grok Bot 用に用意していた Linux VM に同居させてみました。最初のログインで画面が真っ白になるところから始まり、直したあとは全画面をスクリプトで撮り切りました。チャットモデルを GPT 6 Astra へ切り替える手順から、Autopilot（自動売買）で実際に戦略を走らせる画面、全 10 項目の設定内容まで、その実機スクリーンショットとともに追っていきます。</p>
+<p class="lead">「Claude Code の金融版ハーネス」と紹介されていた Minara Harness を、Grok Bot が動いている Linux VM に同居させてみました。最初のログインで画面が真っ白になるところから始まり、直したあとは全画面をスクリプトで撮り切りました。チャットモデルを GPT 6 Astra へ切り替える手順から、Autopilot（自動売買）で実際に戦略を走らせる画面、全 10 項目の設定内容まで、その実機スクリーンショットとともに追っていきます。</p>
 
 <div class="meta">
   <ul style="margin:0;padding-left:1.2em">
-    <li>検証環境: Grok Bot 用の Linux VM（Debian 13、Docker コンテナ内 / X11 デスクトップ）、Minara Harness 1.0.1（.deb 版）、2026 年 9 月 9 日時点</li>
+    <li>検証環境: Grok Bot が動いている Linux VM（Debian 13、Docker コンテナ内 / X11 デスクトップ）、Minara Harness 1.0.1（.deb 版）、2026 年 9 月 9 日時点</li>
     <li>認証状況: Minara アカウント＋ChatGPT アカウント（OpenAI OAuth）を連携済み</li>
     <li>図の凡例: 画像内の赤丸番号は、各キャプション下のリストに対応します。セキュリティ保護のためウォレットアドレスはマスキングしていますが、残高や戦略名はそのまま掲載しています</li>
     <li>読み進め方: 1〜3 章で概要と基本操作を押さえ、4 章以降は各機能のリファレンスとして活用してください</li>
@@ -92,7 +92,7 @@
 <!-- ===================================================== -->
 <h2 id="ch0">0. はじめに: Grok Bot の VM に入れてみた</h2>
 
-<p>手元には、Grok Bot という AI エージェントを動かすための Linux VM が 1 台あります。実体は Debian 13 の Docker コンテナで、X11 デスクトップを VNC 越しに使う構成です。もともと GUI アプリを動かす前提の箱ではありません。そこに「Claude Code の金融版ハーネス」と紹介されていた Minara Harness を同居させたらどうなるか気になり、試してみることにしました。macOS 版を紹介する記事は見かけましたが、Linux 版の画面をひととおり並べた記事は見当たりませんでした。</p>
+<p>手元には、Grok Bot という AI エージェントが動いている Linux VM が 1 台あります。実体は Debian 13 の Docker コンテナで、X11 デスクトップを VNC 越しに使う構成です。もともと GUI アプリを動かす前提の箱ではありません。そこに「Claude Code の金融版ハーネス」と紹介されていた Minara Harness を同居させたらどうなるか気になり、試してみることにしました。macOS 版を紹介する記事は見かけましたが、Linux 版の画面をひととおり並べた記事は見当たりませんでした。</p>
 
 <div class="warn">公式ページで対応 OS として案内されているのは macOS だけです。Linux 用の .deb は配布されているものの公式サポートの対象ではないため、この記事の内容は非公式環境での動作報告として、自己責任で読んでください。1.0.1 では起動フラグを 2 つ足せば動きますが、Factor Research が無効、Personalization 設定がないなど、macOS 版と差があります（9 章）。</div>
 
@@ -106,7 +106,7 @@
 
 <table>
 <tr><th>項目</th><th>内容</th></tr>
-<tr><td>ホスト</td><td>Grok Bot 用の Linux VM。Debian 13、Docker コンテナ内、X11 デスクトップ（VNC 経由）、<code>/dev/shm</code> は 64 MB</td></tr>
+<tr><td>ホスト</td><td>Grok Bot が動いている Linux VM。Debian 13、Docker コンテナ内、X11 デスクトップ（VNC 経由）、<code>/dev/shm</code> は 64 MB</td></tr>
 <tr><td>アプリ</td><td>Minara Harness 1.0.1（Linux 用 .deb、711 MB、インストール先 <code>/opt/Minara</code>）。起動オプションは <code>--no-sandbox --disable-dev-shm-usage</code>（9 章）</td></tr>
 <tr><td>認証</td><td>Minara アカウント（OAuth）と ChatGPT アカウント（OpenAI OAuth）を連携。既定モデルの Minara auto から GPT 6 Astra に切り替えて使用</td></tr>
 <tr><td>撮影方法</td><td>Electron の DevTools ポート（Chrome DevTools Protocol）に Python から接続し、画面遷移・スクリーンショット取得・入力操作をスクリプトで実行。ウィンドウサイズは 1280×720 前後</td></tr>
